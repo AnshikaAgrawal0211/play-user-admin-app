@@ -1,0 +1,27 @@
+@(users: Form[form.SignUpData])(implicit request: MessagesRequestHeader)
+
+@import helper._
+
+@request.flash.get("success").map { key =>
+@request.messages(key)
+}
+
+@main("Sign Up Form") {
+    @form(routes.UserController.addUser()) {
+        @inputText(users("first name"))
+        @inputText(users("middle name"))
+        @inputText(users("last name"))
+        @inputText(users("username"))
+        @inputPassword(users("password"))
+        @inputPassword(users("re-enter password"))
+        @inputText(users("mobile number"))
+        @inputRadioGroup(users("gender"),
+        options("M"->"Male","F"->"Female"))
+        @inputText(users("age"))
+        @CSRF.formField
+
+        <div class="buttons">
+            <input type="submit" value="Sing Up"/>
+        </div>
+    }
+}

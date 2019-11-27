@@ -1,0 +1,15 @@
+@(message: String)
+
+@import helper._
+
+@main("Welcome") {
+
+<h3 class="welcome-message"> @message </h3>
+<div class="buttons">
+
+    <input type="submit" value="Sign In"/>
+    @form(routes.UserController.signUp()){
+    <input type="submit" value="Sign Up"/>}
+</div>
+
+}
