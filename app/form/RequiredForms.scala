@@ -7,7 +7,7 @@ import play.api.data.validation._
 import play.api.data.validation.Constraints._
 
 case class SignUpData(firstName: String,middleName: String,lastName: String,username: String,password:String,reEnterPassword: String,mobileNo: String,gender: String, age: Int)
-//case class SignInData(name: String, age: Int)
+case class SignInData(username: String, password: String)
 
 class FormMappingData {
 
@@ -48,12 +48,13 @@ class FormMappingData {
       "Mobile No." -> nonEmptyText.verifying(mobileConstraint,minLength(10),maxLength(10)),
       "Gender" -> nonEmptyText,
       "Age" -> number.verifying(min(18), max(75))
-    )(SignUpData.apply )(SignUpData.unapply)
+    )(SignUpData.apply )(SignUpData.unapply).verifying("Password do not match",data => data.password == data.reEnterPassword)
   }
 
-//  val signInForm: Form[SignInData] = Form {
-//    mapping(
-//
-//    )
-//  }
+  val signInForm: Form[SignInData] = Form {
+    mapping(
+      "Username" -> nonEmptyText,
+      "password" -> nonEmptyText
+    )(SignInData.apply )(SignInData.unapply)
+  }
 }
