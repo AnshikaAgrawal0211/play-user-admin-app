@@ -1,0 +1,31 @@
+@(profile: Form[form.ProfileData])(implicit request: MessagesRequestHeader)
+
+@import helper._
+
+@request.flash.get("success").map { key =>
+@request.messages(key)
+}
+
+@main("Profile Form") {
+<div class="buttons">
+    @form(routes.UserController.home()){
+    <input type="submit" value="Profile"/>}
+    <input type="submit" value="Assignments">
+</div>
+@form(routes.UserController.updateProfile()) {
+@inputText(profile("first name"))
+@inputText(profile("middle name"))
+@inputText(profile("last name"))
+@inputPassword(profile("password"))
+@inputText(profile("mobile number"))
+@inputRadioGroup(profile("gender"),
+options("M"->"Male","F"->"Female"))
+@inputText(profile("age"))
+@CSRF.formField
+
+<div class="buttons">
+    @form(routes.UserController.profile()){
+    <input type="submit" value="Update"/>}
+</div>
+}
+}

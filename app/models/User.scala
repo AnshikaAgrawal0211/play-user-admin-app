@@ -1,7 +1,6 @@
 package models
 
-case class User(firstName: String,middleName: String,
+case class User(id: Int,firstName: String,middleName: Option[String],
                 lastName: String,userName: String,
-                password: String,reEnterPassword: String,
-                mobileNumber: String,gender: String,
-                age: Int)
+                password: String,mobileNumber: String,
+                gender: String, age: Int)

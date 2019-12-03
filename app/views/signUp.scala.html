@@ -21,7 +21,8 @@
         @CSRF.formField
 
         <div class="buttons">
-            <input type="submit" value="Sing Up"/>
+            @form(routes.UserController.profile()){
+            <input type="submit" value="Sing Up"/>}
         </div>
     }
 }

@@ -1,0 +1,21 @@
+@(users: Form[form.SignInData])(implicit request: MessagesRequestHeader)
+
+@import helper._
+
+@request.flash.get("success").map { key =>
+@request.messages(key)
+}
+
+@main("Sign In Form") {
+    @form(routes.UserController.signInCheck) {
+        @inputText(users("username"))
+        @inputPassword(users("password"))
+
+        <div class="buttons">
+            @form(routes.UserController.profile()){
+            <input type="submit" value="Sing In"/>}
+            @form(routes.UserController.updatePassword()){
+            <input type="submit" value="Forget Password"/>}
+        </div>
+    }
+}
