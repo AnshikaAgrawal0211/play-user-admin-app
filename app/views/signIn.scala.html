@@ -10,6 +10,7 @@
     @form(routes.UserController.signInCheck) {
         @inputText(users("username"))
         @inputPassword(users("password"))
+        @CSRF.formField
 
         <div class="buttons">
             @form(routes.UserController.profile()){
