@@ -19,12 +19,12 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
   private class UserTable(tag: Tag) extends Table[User](tag, "user") {
 
     def id: Rep[Int] = column[Int]("id", O.PrimaryKey, O.AutoInc)
-    def firstName: Rep[String] = column[String]("first name")
-    def middleName: Rep[Option[String]] = column[Option[String]]("middle name")
-    def lastName: Rep[String] = column[String]("last name")
-    def username: Rep[String] = column[String]("username")
+    def firstName: Rep[String] = column[String]("firstName")
+    def middleName: Rep[Option[String]] = column[Option[String]]("middleName")
+    def lastName: Rep[String] = column[String]("lastName")
+    def username: Rep[String] = column[String]("userName")
     def password: Rep[String] = column[String]("password")
-    def mobileNumber: Rep[String] = column[String]("mobile number")
+    def mobileNumber: Rep[String] = column[String]("mobileNumber")
     def gender: Rep[String] = column[String]("gender")
     def age: Rep[Int] = column[Int]("age")
 
@@ -34,8 +34,8 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
 
   private val user = TableQuery[UserTable]
 
-  def updatePassword(username: String,password: String): Future[Boolean] ={
-    db.run(user.filter(_.username===username).map(_.password).update(password)).map(_ > 0)
+  def updatePassword(userName: String,password: String): Future[Boolean] ={
+    db.run(user.filter(_.username===userName).map(_.password).update(password)).map(_ > 0)
   }
 
   def checkSignInValue(username:String, password : String): Future[Boolean] ={
@@ -63,7 +63,7 @@ class UserRepository@Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit
   def updateProfile(profileData: ProfileData,username:String): Future[Boolean] ={
     db.run(user.filter(_.username===username).map(info=> (info.firstName,info.middleName,info.lastName,
       info.mobileNumber,info.age,info.gender)).update(profileData.firstName,profileData.middleName,
-      profileData.lastName,profileData.mobileNo,profileData.age,profileData.gender)).map(_ > 0)
+      profileData.lastName,profileData.mobileNumber,profileData.age,profileData.gender)).map(_ > 0)
   }
 
   def retrieve(username: String): Future[List[User]] = {

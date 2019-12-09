@@ -16,28 +16,30 @@ class UserController @Inject()(cc: MessagesControllerComponents,
   extends MessagesAbstractController(cc) {
 
   def welcome: Action[AnyContent] = Action { implicit request =>
+    println("\n\nINFO->>> Redirecting to welcome page")
     Ok(views.html.welcome("welcome to my app!"))
   }
 
   def signUp: Action[AnyContent] = Action { implicit request =>
+    println("\n\nINFO->>> Redirecting to signup page")
     Ok(views.html.signUp(formData.signUpForm))
   }
 
   def addUser: Action[AnyContent] = Action.async { implicit request =>
     formData.signUpForm.bindFromRequest.fold(
-      errorForm => { println("Error while creating an account" + errorForm )
+      errorForm => { println("\n\nERROR->>> Error while creating an account" + errorForm )
         Future.successful(Redirect(routes.UserController.signUp()).flashing("Error" -> "Fill Form Correctly"))
       },
       users =>{
-        println(s"###User ${users.username}")
+        println(s"\n\nINFO->>> User ${users.username}")
         repo.findByUsername(users.username).flatMap{
-          case Some(value) => println("username already exist, try with new one" + value)
+          case Some(value) => println("\n\nINFO->>> username already exist, try with new one" + value)
             Future.successful(Redirect(routes.UserController.signUp()).flashing("Error" -> "username Already exists"))
-          case None => println("UserInfo after creating an account : " + users)
+          case None => println("\n\nINFO->>> UserInfo after creating an account : " + users)
             val encryptPassword = BCrypt.hashpw(users.password, BCrypt.gensalt)
             repo.store(User(0, users.firstName, users.middleName, users.lastName,
               users.username, encryptPassword, users.mobileNumber, users.gender, users.age)).map{ _ =>
-              println("Redirecting to profile page")
+              println("\n\nINFO->>> Redirecting to profile page")
               Redirect(routes.UserController.profile()).flashing("success"-> "user created")
             }
         }
@@ -46,53 +48,55 @@ class UserController @Inject()(cc: MessagesControllerComponents,
   }
 
   def signIn: Action[AnyContent] = Action { implicit request =>
+    println("\n\nINFO->>> redirecting to sign in page")
     Ok(views.html.signIn(formData.signInForm))
   }
 
   def signInCheck: Action[AnyContent] =Action.async { implicit request =>
     formData.signInForm.bindFromRequest.fold(
-      errorForm => { println("Error while signing in" + errorForm)
+      errorForm => { println("\n\nERROR->>> Error while signing in" + errorForm)
         Future.successful(Redirect(routes.UserController.signIn()).flashing("Error"->"Fill Form Correctly"))
       },
       users => {
-        repo.findByUsername(users.username).flatMap{
+        repo.findByUsername(users.userName).flatMap{
           case Some(value)=>
-            println("Checking for user" + value)
-            repo.checkSignInValue(users.username,users.password).flatMap
+            println("\n\nINFO->>> Checking for user" + value)
+            repo.checkSignInValue(users.userName,users.password).flatMap
             {
-              case true =>{ println("Successfully signed in")
+              case true =>{ println("\n\nINFO->>> Successfully signed in")
                 Future.successful(Redirect(routes.UserController.profile())
-                    .flashing("Success" -> "SignIn successfully").withSession("user"->users.username))}
-              case false =>{ println("wrong username or password")
+                    .flashing("Success" -> "SignIn successfully").withSession("user"->users.userName))}
+              case false =>{ println("\n\nINFO->>> wrong username or password")
                 Future.successful(Redirect(routes.UserController.signIn()).flashing("Error"->"Wrong Username or Password"))}
             }
           case None =>
-            println("no username found, enter a valid username")
+            println("\n\nINFO->>> no username found, enter a valid username")
             Future.successful(Redirect(routes.UserController.signIn()).flashing("Error"-> "No user by this username"))
         }
       })
   }
   
   def updatePassword: Action[AnyContent] = Action { implicit request =>
+    println("\n\nINFO->>> Redirecting to update password page")
     Ok(views.html.updatePassword(formData.updatePasswordForm))
   }
 
   def passwordUpdate: Action[AnyContent] = Action.async { implicit request =>
     formData.updatePasswordForm.bindFromRequest.fold(
-      errorForm => { println("error in password update" + errorForm)
+      errorForm => { println("\n\nERROR->>> error in password update" + errorForm)
         Future.successful(Redirect(routes.UserController.updatePassword()).flashing("Error" -> "Fill Form Correctly"))
       },
       users =>{
-        repo.findByUsername(users.username).flatMap{
-          case Some(value) => println("username found" + value)
+        repo.findByUsername(users.userName).flatMap{
+          case Some(value) => println("\n\nINFO->>> username found " + value)
             val encryptPassword = BCrypt.hashpw(users.password, BCrypt.gensalt)
-            repo.updatePassword(encryptPassword,users.username).map{
-              case true => println("redirecting to profile page")
+            repo.updatePassword(users.userName, encryptPassword).map{
+              case true => println("\n\nINFO->>> redirecting to profile page")
                 Redirect(routes.UserController.profile()).withNewSession
-              case false => println("enter a valid password")
+              case false => println("\n\nINFO->>> enter a valid password")
                 Redirect(routes.UserController.updatePassword()).flashing("Error"->"Try Again")
             }
-          case None => println("enter a valid username")
+          case None => println("\n\nINFO->>> enter a valid username")
             Future.successful(Redirect(routes.UserController.updatePassword()).flashing("Error" -> "enter a valid username"))
         }
       }
@@ -100,10 +104,12 @@ class UserController @Inject()(cc: MessagesControllerComponents,
   }
 
   def home: Action[AnyContent] = Action{ implicit request =>
+    println("\n\nINFO->>> redirecting to home page")
     Ok(views.html.home("WELCOME"))
   }
 
   def profile:Action[AnyContent] = Action { implicit request =>
+    println("\n\nINFO->>> redirecting to profile form page")
     Ok(views.html.profile(formData.profileForm))
   }
 
@@ -112,18 +118,18 @@ class UserController @Inject()(cc: MessagesControllerComponents,
     username match {
       case Some(user) =>
         formData.profileForm.bindFromRequest.fold(
-          errorForm => { println("error while updating profile" + errorForm)
+          errorForm => { println("\n\nERROR->>> error while updating profile" + errorForm)
             Future.successful(Redirect(routes.UserController.updateProfile()).flashing("Error" -> "update form currently"))
           },
           profile => {
             repo.updateProfile(profile, user).flatMap {
-              case true => println("profile is updated")
+              case true => println("\n\nINFO->>> profile is updated")
                 Future.successful(Redirect(routes.UserController.profile()).flashing("Success"->"Your Profile is updated"))
-              case false => println("can't update profile")
+              case false => println("\n\nINFO->>> can't update profile")
                 Future.successful(Redirect(routes.UserController.profile()).withNewSession)
             }
           })
-      case None => println("unauthorised, you need to sign in")
+      case None => println("\n\nINFO->>> unauthorised, you need to sign in")
         Future.successful(Redirect(routes.UserController.profile()).flashing("unauthorised" -> "You need to sign in first!").withNewSession)
     }
   }

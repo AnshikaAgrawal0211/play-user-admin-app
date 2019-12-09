@@ -8,13 +8,13 @@
 
 @main("Sign In Form") {
     @form(routes.UserController.signInCheck) {
-        @inputText(users("username"))
+        @inputText(users("userName"))
         @inputPassword(users("password"))
         @CSRF.formField
 
         <div class="buttons">
             @form(routes.UserController.profile()){
-            <input type="submit" value="Sing In"/>}
+            <input type="submit" value="Sign In"/>}
             @form(routes.UserController.updatePassword()){
             <input type="submit" value="Forget Password"/>}
         </div>

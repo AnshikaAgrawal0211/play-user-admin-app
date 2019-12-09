@@ -13,11 +13,10 @@
     <input type="submit" value="Assignments">
 </div>
 @form(routes.UserController.updateProfile()) {
-@inputText(profile("first name"))
-@inputText(profile("middle name"))
-@inputText(profile("last name"))
-@inputPassword(profile("password"))
-@inputText(profile("mobile number"))
+@inputText(profile("firstName"))
+@inputText(profile("middleName"))
+@inputText(profile("lastName"))
+@inputText(profile("mobileNumber"))
 @inputRadioGroup(profile("gender"),
 options("M"->"Male","F"->"Female"))
 @inputText(profile("age"))

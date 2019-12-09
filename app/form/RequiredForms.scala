@@ -11,16 +11,30 @@ case class SignUpData(firstName: String,middleName: Option[String],
                       password:String,confirmPassword: String,
                       mobileNumber: String,gender: String, age: Int)
 
-case class SignInData(username: String, password: String)
+case class SignInData(userName: String, password: String)
 
-case class UpdatePasswordData(username : String,password : String,
+case class UpdatePasswordData(userName : String,password : String,
                               confirmPassword : String)
 
 case class ProfileData(firstName: String,middleName: Option[String],
-                       lastName: String,mobileNo: String,
+                       lastName: String,mobileNumber: String,
                        gender: String, age: Int)
 
 case class AssignmentData(title: String,description:String)
+
+object ProfileData{
+  def apply(list: List[(String, Option[String], String, String, String,Int)]): ProfileData = {
+    val firstName = list.head._1
+    val middleName = list.head._2
+    val lastName = list.head._3
+    val mobileNumber = list.head._4
+    val gender = list.head._5
+    val age = list.head._6
+
+    new ProfileData(firstName, middleName, lastName,mobileNumber, gender, age)
+  }
+}
+
 
 class FormMappingData {
 
@@ -82,16 +96,16 @@ class FormMappingData {
 
   val signInForm: Form[SignInData] = Form {
     mapping(
-      "Username" -> nonEmptyText,
+      "userName" -> nonEmptyText,
       "password" -> nonEmptyText
     )(SignInData.apply )(SignInData.unapply)
   }
 
   val updatePasswordForm: Form[UpdatePasswordData]= Form {
     mapping(
-      "username" -> nonEmptyText,
+      "userName" -> nonEmptyText,
       "password" -> nonEmptyText,
-      "confirm Password" -> nonEmptyText
+      "confirmPassword" -> nonEmptyText
     )(UpdatePasswordData.apply)(UpdatePasswordData.unapply)
       .verifying("Password do not match",data => data.password.equals(data.confirmPassword))
   }
