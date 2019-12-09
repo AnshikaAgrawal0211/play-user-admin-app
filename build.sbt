@@ -15,6 +15,8 @@ libraryDependencies += "com.h2database" % "h2" % "1.4.199"
 libraryDependencies += specs2 % Test
 libraryDependencies +=   "org.postgresql" % "postgresql" % "42.1.4"
 libraryDependencies += "org.mindrot" % "jbcrypt" % "0.4"
+libraryDependencies += "org.slf4j" % "slf4j-api" % "1.7.5"
+libraryDependencies += "org.slf4j" %"slf4j-simple"%"1.7.5"
 scalacOptions ++= Seq(
   "-feature",
   "-deprecation",

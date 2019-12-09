@@ -8,13 +8,13 @@
 
 @main("Sign Up Form") {
     @form(routes.UserController.addUser()) {
-        @inputText(users("first name"))
-        @inputText(users("middle name"))
-        @inputText(users("last name"))
-        @inputText(users("username"))
+        @inputText(users("firstName"))
+        @inputText(users("middleName"))
+        @inputText(users("lastName"))
+        @inputText(users("userName"))
         @inputPassword(users("password"))
-        @inputPassword(users("re-enter password"))
-        @inputText(users("mobile number"))
+        @inputPassword(users("confirmPassword"))
+        @inputText(users("mobileNumber"))
         @inputRadioGroup(users("gender"),
         options("M"->"Male","F"->"Female"))
         @inputText(users("age"))
@@ -22,7 +22,7 @@
 
         <div class="buttons">
             @form(routes.UserController.profile()){
-            <input type="submit" value="Sing Up"/>}
+            <input type="submit" value="Sign Up"/>}
         </div>
     }
 }

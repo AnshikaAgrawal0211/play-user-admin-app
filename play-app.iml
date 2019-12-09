@@ -17,7 +17,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: aopalliance:aopalliance:1.0:jar" level="project" />
-    <orderEntry type="library" name="sbt: org.postgresql:postgresql:9.4-1206-jdbc42:jar" level="project" />
     <orderEntry type="library" name="sbt: org.mindrot:jbcrypt:0.4:jar" level="project" />
     <orderEntry type="module-library">
       <library name="sbt: unmanaged-sources-and-docs">
@@ -154,5 +153,7 @@
     <orderEntry type="library" name="sbt: com.fasterxml.jackson.core:jackson-annotations:2.9.8:jar" level="project" />
     <orderEntry type="library" name="sbt: ch.qos.logback:logback-core:1.2.3:jar" level="project" />
     <orderEntry type="library" name="sbt: ch.qos.logback:logback-classic:1.2.3:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.postgresql:postgresql:42.1.4:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.slf4j:slf4j-simple:1.7.5:jar" level="project" />
   </component>
 </module>

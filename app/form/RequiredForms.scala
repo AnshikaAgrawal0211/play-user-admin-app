@@ -8,8 +8,8 @@ import play.api.data.validation.Constraints._
 
 case class SignUpData(firstName: String,middleName: Option[String],
                       lastName: String,username: String,
-                      password:String,reEnterPassword: String,
-                      mobileNo: String,gender: String, age: Int)
+                      password:String,confirmPassword: String,
+                      mobileNumber: String,gender: String, age: Int)
 
 case class SignInData(username: String, password: String)
 
@@ -39,14 +39,16 @@ class FormMappingData {
 
   val middleNameConstraint: Constraint[Option[String]] = Constraint("constraints.name")({
     name =>
-      val errors = ("""[^A-Z a-z]""").r.findFirstIn(name.fold("Empty")(identity)) match {
-        case None => Nil
-        case Some(_) => Seq(ValidationError("name should not contain no. or special character"))
-      }
-      if (errors.isEmpty) {
+      if (name.isEmpty)
         Valid
-      } else {
-        Invalid(errors)
+      else {
+        val errors = ("""[^A-Z a-z]""").r.findFirstIn(name.fold("Empty")(identity)) match {
+          case None    => Nil
+          case Some(_) => Seq(ValidationError("name should not contain no. or special character"))}
+        if (errors.isEmpty)
+          Valid
+        else
+          Invalid(errors)
       }
   })
 
@@ -65,17 +67,17 @@ class FormMappingData {
 
   val signUpForm: Form[SignUpData] = Form {
     mapping(
-      "First Name" -> nonEmptyText.verifying(nameConstraint),
-      "Middle Name" -> optional(text).verifying(middleNameConstraint),
-      "Last Name" ->  nonEmptyText.verifying(nameConstraint),
-      "Username"  -> nonEmptyText,
-      "Password" -> nonEmptyText,
-      "Re-enter Password" -> nonEmptyText,
-      "Mobile No." -> nonEmptyText.verifying(mobileConstraint),
-      "Gender" -> nonEmptyText,
-      "Age" -> number.verifying(min(18), max(75))
+      "firstName" -> nonEmptyText.verifying(nameConstraint),
+      "middleName" -> optional(text).verifying(middleNameConstraint),
+      "lastName" ->  nonEmptyText.verifying(nameConstraint),
+      "userName"  -> nonEmptyText,
+      "password" -> nonEmptyText,
+      "confirmPassword" -> nonEmptyText,
+      "mobileNumber" -> nonEmptyText.verifying(mobileConstraint),
+      "gender" -> nonEmptyText,
+      "age" -> number.verifying(min(18), max(75))
     )(SignUpData.apply )(SignUpData.unapply _)
-      .verifying("Password do not match",data => data.password.equals(data.reEnterPassword))
+      .verifying("Password do not match",data => data.password.equals(data.confirmPassword))
   }
 
   val signInForm: Form[SignInData] = Form {
